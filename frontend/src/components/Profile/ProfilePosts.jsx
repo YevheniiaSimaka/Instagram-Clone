@@ -51,7 +51,7 @@ const ProfilePosts = () => {
       {!isLoading && (
         <>
           {posts.map((post) => (
-            <ProfilePost post={post} postedBy={""} key={post._id} />
+            <ProfilePost post={post} postedBy={post.postedBy} key={post._id} />
           ))}
           {posts == 0 && "No posts yet"}
         </>

@@ -6,6 +6,9 @@ import userAtom from "../../atoms/userAtom";
 
 const Profile = () => {
   const [user, setUser] = useRecoilState(userAtom);
+  const reload = () => {
+    window.location.reload();
+  };
 
   return (
     <Tooltip

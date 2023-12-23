@@ -1,42 +1,45 @@
 import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { Link } from "react-router-dom";
 
-const PostHeader = ({ username, avatar, date }) => {
+const PostHeader = ({ username, avatar, date, link }) => {
   return (
-    <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
-      <Flex gap={2} alignItems={"center"}>
-        <Avatar src={avatar} size={"sm"} />
-        <Flex alignItems={"center"} justifyContent={"center"}>
-          <Text fontSize={12} fontWeight={"bold"} gap={2}>
-            {username}
-          </Text>
-          <Box
-            bg={"whiteAlpha.600"}
-            w={"3px"}
-            h={"3px"}
-            borderRadius={"full"}
-            mx={2}
-          />
-          <Text color={"whiteAlpha.600"} fontSize={12}>
-            {formatDistanceToNowStrict(new Date(date))} ago
-          </Text>
+    <Link to={link}>
+      <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
+        <Flex gap={2} alignItems={"center"}>
+          <Avatar src={avatar} size={"sm"} />
+          <Flex alignItems={"center"} justifyContent={"center"}>
+            <Text fontSize={12} fontWeight={"bold"} gap={2}>
+              {username}
+            </Text>
+            <Box
+              bg={"whiteAlpha.600"}
+              w={"3px"}
+              h={"3px"}
+              borderRadius={"full"}
+              mx={2}
+            />
+            <Text color={"whiteAlpha.600"} fontSize={12}>
+              {formatDistanceToNowStrict(new Date(date))} ago
+            </Text>
+          </Flex>
         </Flex>
+        <Box cursor={"pointer"}>
+          <Text
+            color={"blue.500"}
+            padding={"4px 10px"}
+            bg={"gray.900"}
+            _hover={{ bg: "gray.800" }}
+            transition={"0.25s"}
+            borderRadius={"2px"}
+            fontWeight={"semibold"}
+            fontSize={12}
+          >
+            Unfollow
+          </Text>
+        </Box>
       </Flex>
-      <Box cursor={"pointer"}>
-        <Text
-          color={"blue.500"}
-          padding={"4px 10px"}
-          bg={"gray.900"}
-          _hover={{ bg: "gray.800" }}
-          transition={"0.25s"}
-          borderRadius={"2px"}
-          fontWeight={"semibold"}
-          fontSize={12}
-        >
-          Unfollow
-        </Text>
-      </Box>
-    </Flex>
+    </Link>
   );
 };
 

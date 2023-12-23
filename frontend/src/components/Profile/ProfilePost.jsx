@@ -15,18 +15,60 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Comment from "../Comment/Comment";
 import PostFooter from "../FeedPosts/PostFooter";
 import { formatDistanceToNowStrict } from "date-fns";
+import { useRecoilValue } from "recoil";
+import userAtom from "../../atoms/userAtom";
 
 const ProfilePost = ({ post, postedBy }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isComments, setIsComments] = useState(true);
   console.log(post.replies);
+  const user = useRecoilValue(userAtom);
+  const [postUser, setPostUser] = useState(null);
+
+  // find user
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await fetch(`/api/users/profile/${postedBy}`);
+        const data = await res.json();
+
+        console.log(data);
+        setPostUser(data);
+      } catch (err) {
+        consolelog(err);
+        alert(err);
+      }
+    };
+
+    getUser();
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      console.log(data);
+      window.location.reload();
+    } catch (err) {
+      consolelog(err);
+      alert(err);
+    }
+  };
+
+  console.log(user._id, postedBy);
 
   return (
     <>
@@ -127,18 +169,23 @@ const ProfilePost = ({ post, postedBy }) => {
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
                   {/* PROFILE */}
                   <Flex w={"fit-content"} alignItems={"center"} gap={4}>
-                    <Avatar src="/profilepic.png" />
-                    <Text fontWeight={"bold"}>asaprogrammer_</Text>
+                    <Avatar src={postUser ? postUser.profilePic : ""} />
+                    <Text fontWeight={"bold"}>
+                      {postUser ? postUser.username : ""}
+                    </Text>
                   </Flex>
 
                   {/* DELETE ICON */}
-                  <Box
-                    _hover={{ bg: "whiteAlpha.300" }}
-                    padding={"0.5rem"}
-                    borderRadius={"full"}
-                  >
-                    <MdDelete size={20} cursor={"pointer"} />
-                  </Box>
+                  {user._id == postedBy && (
+                    <Box
+                      _hover={{ bg: "whiteAlpha.300" }}
+                      padding={"0.5rem"}
+                      borderRadius={"full"}
+                      onClick={handleDelete}
+                    >
+                      <MdDelete size={20} cursor={"pointer"} />
+                    </Box>
+                  )}
                 </Flex>
                 <Divider my={2} mb={0} bg={"gray.700"} />
                 {/* Tabs */}
