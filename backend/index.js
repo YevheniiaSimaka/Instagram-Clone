@@ -30,5 +30,3 @@ app.use("/api/posts", postRoutes);
 app.listen(PORT, () => {
   console.log(`Server started at the port ${PORT}`);
 });
-
-// check if .env sincs
